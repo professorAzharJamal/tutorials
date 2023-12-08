@@ -1,0 +1,24 @@
+
+<html>
+    <head>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    </head>
+    <body>
+        <h1>
+            Taking a screen shot of webpage by html2canvas
+        </h1>
+        <div id="bird" class="bird">
+            <img src="bird.png" width='100' height="100">
+        </div>
+        <input type="button" id="id_screenshot" value="Take Screenshot" onclick="screenshot();"/>
+        <br/>
+        <script type="text/javascript">
+            function screenshot(){
+                html2canvas(document.getElementById('bird')).then(function(canvas){
+                    document.body.appendChild(canvas)
+                })
+                document.getElementById('id_screenshot').disabled = true;
+            }
+        </script>
+    </body>
+</html>
