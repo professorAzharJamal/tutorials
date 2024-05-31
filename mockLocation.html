@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Geolocation</title>
+</head>
+<body>
+  <button id="mock-location-button">Mock Location</button>
+  <button id="restore-location-button">Restore Location</button>
+
+  <script>
+   // Store references to the original geolocation methods
+const originalGeolocation = {
+  getCurrentPosition: navigator.geolocation.getCurrentPosition,
+  watchPosition: navigator.geolocation.watchPosition
+};
+
+// Mock the location
+const mockLocation = {
+  latitude: 37.7749,  // Set your desired latitude
+  longitude: -122.4194  // Set your desired longitude
+};
+
+// Override the getCurrentPosition method
+function mockGeolocation() {
+  navigator.geolocation.getCurrentPosition = function(success, error, options) {
+    success({
+      coords: {
+        latitude: mockLocation.latitude,
+        longitude: mockLocation.longitude,
+        accuracy: 100,
+        altitude: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null
+      },
+      timestamp: Date.now()
+    });
+  };
+
+  // Override the watchPosition method
+  navigator.geolocation.watchPosition = function(success, error, options) {
+    success({
+      coords: {
+        latitude: mockLocation.latitude,
+        longitude: mockLocation.longitude,
+        accuracy: 100,
+        altitude: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null
+      },
+      timestamp: Date.now()
+    });
+
+    // Return an arbitrary id to represent the watchPosition call
+    return 1;  
+  };
+
+  console.log('Geolocation methods are now mocked.');
+
+// Display mocked location
+navigator.geolocation.getCurrentPosition(function(position) {
+    console.log('Mocked Latitude:', position.coords.latitude);
+    console.log('Mocked Longitude:', position.coords.longitude);
+  });
+}
+
+// Function to restore original geolocation methods
+function restoreGeolocation() {
+  navigator.geolocation.getCurrentPosition = originalGeolocation.getCurrentPosition;
+  navigator.geolocation.watchPosition = originalGeolocation.watchPosition;
+  console.log('Geolocation methods restored to original.');
+  // Display restored location
+  navigator.geolocation.getCurrentPosition(function(position) {
+    console.log('Restored Latitude:', position.coords.latitude);
+    console.log('Restored Longitude:', position.coords.longitude);
+  }, function(error) {
+    console.error('Error getting position:', error);
+  });
+
+}
+
+// Add event listeners to buttons
+document.getElementById('mock-location-button').addEventListener('click', mockGeolocation);
+document.getElementById('restore-location-button').addEventListener('click', restoreGeolocation);
+
+// Example usage of mocking
+navigator.geolocation.getCurrentPosition(function(position) {
+  console.log('Initial Latitude:', position.coords.latitude);
+  console.log('Initial Longitude:', position.coords.longitude);
+});
+</script>
+
+
+
+  </script>
+</body>
+</html>
